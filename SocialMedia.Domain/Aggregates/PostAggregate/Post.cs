@@ -20,7 +20,7 @@ public class Post
     public IEnumerable<PostInteraction> Interactions { get { return _interactions; } }
 
     // Factories
-    public Post CreatePost(Guid userProfileId, string textContent)
+    public static Post CreatePost(Guid userProfileId, string textContent)
     {
         return new Post
         {
