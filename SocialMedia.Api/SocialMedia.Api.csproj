@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="5.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.22" />
@@ -19,8 +21,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SocialMedia.Dal\SocialMedia.Dal.csproj" />
-    <ProjectReference Include="..\SocialMedia.Domain\SocialMedia.Domain.csproj" />
+    <ProjectReference Include="..\SocialMedia.Application\SocialMedia.Application.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Contracts\Posts\Responses\" />
+    <Folder Include="Contracts\Posts\Requests\" />
   </ItemGroup>
 
 </Project>

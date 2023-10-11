@@ -15,6 +15,7 @@ public class UserProfile
     public DateTime DateCreated { get; private set; }
     public DateTime LastModified { get; private set; }
     
+    //Factory method
     public static UserProfile CreateUserProfile(string identityId, BasicInfo basicInfo)
     {
         // TODO: add validation, error handling strategies, error notification strategies
