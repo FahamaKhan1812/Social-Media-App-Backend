@@ -1,7 +1,8 @@
 ﻿using MediatR;
+using SocialMedia.Application.Models;
 
 namespace SocialMedia.Application.UserProfile.Commands;
-public class CreateUserCommand : IRequest<Domain.Aggregates.UserProfileAggregate.UserProfile>
+public class CreateUserCommand : IRequest<OperationResult<Domain.Aggregates.UserProfileAggregate.UserProfile>>
 {
 
     public string FirstName { get; set; }

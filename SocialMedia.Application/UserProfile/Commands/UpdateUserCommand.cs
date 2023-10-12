@@ -1,7 +1,8 @@
 ﻿using MediatR;
+using SocialMedia.Application.Models;
 
 namespace SocialMedia.Application.UserProfile.Commands;
-public class UpdateUserCommand : IRequest
+public class UpdateUserCommand : IRequest<OperationResult<Domain.Aggregates.UserProfileAggregate.UserProfile>>
 {
     public Guid UserProfileId { get; set; }
     public string FirstName { get; set; }
