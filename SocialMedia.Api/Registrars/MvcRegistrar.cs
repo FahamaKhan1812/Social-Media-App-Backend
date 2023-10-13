@@ -1,12 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.AspNetCore.Mvc;
+using SocialMedia.Api.Filters;
 
 namespace SocialMedia.Api.Registrars;
 public class MvcRegistrar : IWebApplicationBuilderRegistrar
 {
     public void RegisterServices(WebApplicationBuilder builder)
     {
-        builder.Services.AddControllers();
+        builder.Services.AddControllers(config =>
+        {
+            config.Filters.Add(typeof(SocialMdeiaExceptionHandler));
+        });
 
         builder.Services.AddApiVersioning(config =>
         {
