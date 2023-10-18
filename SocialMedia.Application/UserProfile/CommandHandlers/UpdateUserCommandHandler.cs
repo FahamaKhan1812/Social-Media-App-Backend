@@ -5,7 +5,7 @@ using SocialMedia.Application.Models;
 using SocialMedia.Application.UserProfile.Commands;
 using SocialMedia.Dal.Data;
 using SocialMedia.Domain.Aggregates.UserProfileAggregate;
-using System.Security.Cryptography;
+using SocialMedia.Domain.Exceptions;
 
 namespace SocialMedia.Application.UserProfile.CommandHandlers;
 public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, OperationResult<Domain.Aggregates.UserProfileAggregate.UserProfile>>
@@ -47,6 +47,20 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Opera
             _context.UserProfiles.Update(userProfile);
             await _context.SaveChangesAsync(cancellationToken);
             result.Payload = userProfile;
+            return result;
+        }
+        catch (UserProfileNotValidException e)
+        {
+            result.IsError = true;
+            e.ValidationErrors.ForEach(err =>
+            {
+                var errors = new Error
+                {
+                    Code = ErrorCode.ValidationError,
+                    Message = $"{e.Message}"
+                };
+                result.Errors.Add(errors);
+            });
             return result;
         }
         catch (Exception e)

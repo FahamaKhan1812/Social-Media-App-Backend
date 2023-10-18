@@ -21,7 +21,6 @@ internal class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, Ope
 
         var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(user => user.UserProfileId == request.UserProfileId, cancellationToken);
 
-        // TODO: Return type will be decided later
         if (userProfile is null)
         {
             result.IsError = true;
