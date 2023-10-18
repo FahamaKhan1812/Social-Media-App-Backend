@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SocialMedia.Domain.Models;
 
 namespace SocialMedia.Api.Controllers.V1;
 
@@ -11,11 +10,11 @@ public class PostController : ControllerBase
     [HttpGet("{id}")]
     public IActionResult GetById(int id)
     {
-        Post post = new()
-        {
-            Id = id,
-            Text = "Hello"
-        };
-        return Ok(post);
+        //Post post = new()
+        //{
+        //    Id = id,
+        //    Text = "Hello"
+        //};
+        return Ok(true);
     }
 }

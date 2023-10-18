@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SocialMedia.Domain.Models;
+using SocialMedia.Domain.Aggregates.PostAggregates;
 
 namespace SocialMedia.Api.Controllers.V2;
 
@@ -12,11 +12,7 @@ public class PostController : ControllerBase
     [HttpGet("{id}")]
     public IActionResult GetById(int id)
     {
-        Post post = new()
-        {
-            Id = id,
-            Text = "Hello Universe"
-        };
-        return Ok(post);
+      
+        return Ok(true);
     }
 }
