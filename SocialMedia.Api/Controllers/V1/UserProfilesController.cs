@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using SocialMedia.Api.Contracts.Common;
 using SocialMedia.Api.Contracts.UserProfile.Requests;
 using SocialMedia.Api.Contracts.UserProfile.Responses;
+using SocialMedia.Api.Filters;
 using SocialMedia.Application.Enums;
 using SocialMedia.Application.UserProfile.Commands;
 using SocialMedia.Application.UserProfile.Queries;
@@ -23,6 +24,7 @@ public class UserProfilesController : BaseController
         _mediator = mediator;
         _mapper = mapper;
     }
+    
     [HttpGet]
     public async Task<IActionResult> GetAllProfiles()
     {
@@ -33,6 +35,7 @@ public class UserProfilesController : BaseController
     }
 
     [HttpGet(ApiRoutes.UserProfiles.IdRoute)]
+    [ValidGuid("id")]
     public async Task<IActionResult> GetUserProfileById(string id)
     {
         var query = new GetUserProfileById { UserProfileId = Guid.Parse(id) };
@@ -42,6 +45,7 @@ public class UserProfilesController : BaseController
     }
 
     [HttpPost]
+    [ValideModel]
     public async Task<IActionResult> CreateUserProfile([FromBody] UserProfileCreateUpdate profile)
     {
         var command = _mapper.Map<CreateUserCommand>(profile);
@@ -52,6 +56,8 @@ public class UserProfilesController : BaseController
     }
 
     [HttpPatch(ApiRoutes.UserProfiles.IdRoute)]
+    [ValideModel]
+    [ValidGuid("id")]
     public async Task<IActionResult> UpdateUserProfile(string id, UserProfileCreateUpdate updatedProfile)
     {
         var command = _mapper.Map<UpdateUserCommand>(updatedProfile);
@@ -61,6 +67,7 @@ public class UserProfilesController : BaseController
     }
 
     [HttpDelete(ApiRoutes.UserProfiles.IdRoute)]
+    [ValidGuid("id")]
     public async Task<IActionResult> DeleteUserProfile(string id) 
     {
         var command = new DeleteUserCommand() { UserProfileId = Guid.Parse(id) };
