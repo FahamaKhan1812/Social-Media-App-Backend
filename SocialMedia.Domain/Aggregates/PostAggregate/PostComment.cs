@@ -13,7 +13,6 @@ public class PostComment
     public Guid UserProfileId { get; private set; }
     public DateTime DateCreated { get; private set; }
     public DateTime LastModified { get; private set;}
-    public ICollection<PostComment>? Comments { get; private set; }
 
     //Factories
     /// <summary>
