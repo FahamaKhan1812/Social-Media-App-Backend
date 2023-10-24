@@ -9,6 +9,8 @@ public class ApiRoutes
     }
     public class Posts
     {
-        public const string GetById = "{id}";
+        public const string IdRoute = "{id}";
+        public const string PostComment = "{postId}/comments";
+        public const string CommentById = "{postId}/comments/{commentId}";
     }
 }

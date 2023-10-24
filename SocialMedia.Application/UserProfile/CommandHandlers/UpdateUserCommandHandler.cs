@@ -71,8 +71,8 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Opera
                 Message = e.Message,
             };
             result.IsError = true;
+            result.Errors.Add(error);
+            return result;
          }
-      
-       return result;
     }
 }

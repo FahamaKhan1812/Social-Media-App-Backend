@@ -1,5 +1,6 @@
 ﻿using SocialMedia.Application.UserProfile.Queries;
 using MediatR;
+using SocialMedia.Application.Posts.Queries;
 
 namespace SocialMedia.Api.Registrars;
 public class BogardRegistrar : IWebApplicationBuilderRegistrar

@@ -24,9 +24,4 @@
     <ProjectReference Include="..\SocialMedia.Application\SocialMedia.Application.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Contracts\Posts\Responses\" />
-    <Folder Include="Contracts\Posts\Requests\" />
-  </ItemGroup>
-
 </Project>

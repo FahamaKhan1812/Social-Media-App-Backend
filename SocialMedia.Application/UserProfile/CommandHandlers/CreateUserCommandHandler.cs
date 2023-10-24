@@ -53,6 +53,7 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Opera
         {
             result.IsError = true;
             var errors = new Error { Code = ErrorCode.UnknownError, Message = ex.Message };
+            result.Errors.Add(errors);
             return result;
         }
 
