@@ -30,7 +30,7 @@ public class UpdatePostCommandHandler : IRequestHandler<UpdatePostCommand, Opera
                 Error error = new()
                 {
                     Code = ErrorCode.NotFound,
-                    Message = "No User is Found"
+                    Message = "No post is Found"
                 };
                 result.Errors.Add(error);
                 return result;
