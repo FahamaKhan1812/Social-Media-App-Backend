@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SocialMedia.Api.Contracts.Common;
@@ -15,6 +17,7 @@ namespace SocialMedia.Api.Controllers.V1;
 [ApiVersion("1.0")]
 [Route(ApiRoutes.baseRoute)]
 [ApiController]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class UserProfilesController : BaseController
 {
     private readonly IMediator _mediator;
