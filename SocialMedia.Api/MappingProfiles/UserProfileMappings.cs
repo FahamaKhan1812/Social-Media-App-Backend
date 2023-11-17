@@ -9,7 +9,6 @@ public class UserProfileMappings : Profile
 {
     public UserProfileMappings()
     {
-        CreateMap<UserProfileCreateUpdate, CreateUserCommand>();
         CreateMap<UserProfile, UserProfileResponse>();
         CreateMap<BasicInfo, BasicInformation>();
         CreateMap<UserProfileCreateUpdate, UpdateUserCommand>();

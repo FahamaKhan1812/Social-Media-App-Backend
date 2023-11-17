@@ -46,6 +46,7 @@ public class BaseController : ControllerBase
 
             return BadRequest(apiError);
         }
+       
         if (errors.Any(e => e.Code == ErrorCode.IdentityUserNotFound))
         {
             var error = errors.FirstOrDefault(e => e.Code == ErrorCode.IdentityUserNotFound);
@@ -56,6 +57,36 @@ public class BaseController : ControllerBase
             apiError.Errors.Add(error.Message);
 
             return NotFound(apiError);
+        }
+
+        if (errors.Any(e => e.Code == ErrorCode.PostUpdateUserNotPossible))
+        {
+            var error = errors.FirstOrDefault(e => e.Code == ErrorCode.PostUpdateUserNotPossible);
+
+            apiError.StatusCode = 403;
+            apiError.StatusPhrase = "Unauthenticated";
+            apiError.Timestamp = DateTime.Now;
+            apiError.Errors.Add(error.Message);
+
+            return new ObjectResult(apiError)
+            {
+                StatusCode = 403
+            };
+        }
+
+        if (errors.Any(e => e.Code == ErrorCode.PostDeleteNotPossible))
+        {
+            var error = errors.FirstOrDefault(e => e.Code == ErrorCode.PostDeleteNotPossible);
+
+            apiError.StatusCode = 403;
+            apiError.StatusPhrase = "Unauthenticated";
+            apiError.Timestamp = DateTime.Now;
+            apiError.Errors.Add(error.Message);
+
+            return new ObjectResult(apiError)
+            {
+                StatusCode = 403
+            };
         }
 
         apiError.StatusCode = 500;

@@ -47,17 +47,6 @@ public class UserProfilesController : BaseController
         return response.IsError ? HandleErrorResponse(response.Errors) : Ok(userProfile);
     }
 
-    [HttpPost]
-    [ValideModel]
-    public async Task<IActionResult> CreateUserProfile([FromBody] UserProfileCreateUpdate profile)
-    {
-        var command = _mapper.Map<CreateUserCommand>(profile);
-        var response = await _mediator.Send(command);
-        var userProfile = _mapper.Map<UserProfileResponse>(response.Payload);
-
-        return response.IsError ? HandleErrorResponse(response.Errors) : CreatedAtAction(nameof(GetUserProfileById), new { id = userProfile.UserProfileId}, userProfile);
-    }
-
     [HttpPatch(ApiRoutes.UserProfiles.IdRoute)]
     [ValideModel]
     [ValidGuid("id")]

@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SocialMedia.Api.Contracts.Common;
 using SocialMedia.Api.Contracts.Posts.Requests;
 using SocialMedia.Api.Contracts.Posts.Responses;
+using SocialMedia.Api.Extensions;
 using SocialMedia.Api.Filters;
 using SocialMedia.Application.Enums;
 using SocialMedia.Application.Models;
@@ -11,12 +14,15 @@ using SocialMedia.Application.Posts.CommandHandlers;
 using SocialMedia.Application.Posts.Commands;
 using SocialMedia.Application.Posts.Queries;
 using SocialMedia.Domain.Aggregates.PostAggregates;
+using System.Security.Claims;
 
 namespace SocialMedia.Api.Controllers.V1;
 
 [ApiVersion("1.0")]
 [Route(ApiRoutes.baseRoute)]
 [ApiController]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+
 public class PostController : BaseController
 {
     private readonly IMediator _mediator;
@@ -52,9 +58,11 @@ public class PostController : BaseController
     [ValideModel]
     public async Task<IActionResult> CreatePost([FromBody] PostCreate postCreate)
     {
+        var userProfileId = HttpContext.GetUserProfileIdClaimValue();
+
         var command = new CreatePostCommand()
         {
-            UserId = postCreate.UserProfileId,
+            UserId = userProfileId,
             TextContext = postCreate.TextContent
         };
         var result = await _mediator.Send(command);
@@ -71,10 +79,13 @@ public class PostController : BaseController
     [ValideModel]
     public async Task<IActionResult> UpdatePost(string id, [FromBody] UpdatePost updatePost)
     {
+        var userProfileId = HttpContext.GetUserProfileIdClaimValue();
+
         var command = new UpdatePostCommand()
         {
             PostId = Guid.Parse(id),
-            TextContent = updatePost.Text
+            TextContent = updatePost.Text,
+            UserProfileId = userProfileId
         };
         var resposne = await _mediator.Send(command);
         return resposne.IsError ? HandleErrorResponse(resposne.Errors) : NoContent();
@@ -85,7 +96,12 @@ public class PostController : BaseController
     [ValidGuid("id")]
     public async Task<IActionResult> DeletePost(string id)
     {
-        var command = new DeletePostCommand() { PostId = Guid.Parse(id) };
+        var userProfileId = HttpContext.GetUserProfileIdClaimValue();
+        var command = new DeletePostCommand() 
+        { 
+            PostId = Guid.Parse(id),
+            UserPorfileId = userProfileId
+        };
         var resposne = await _mediator.Send(command);
         return resposne.IsError ? HandleErrorResponse(resposne.Errors) : NoContent();
     }

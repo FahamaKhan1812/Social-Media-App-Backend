@@ -34,6 +34,17 @@ public class DeletePostCommandHandler : IRequestHandler<DeletePostCommand, Opera
                 result.Errors.Add(error);
                 return result;
             }
+            if(post.UserProfileId != request.UserPorfileId)
+            {
+                result.IsError = true;
+                Error error = new()
+                {
+                    Code = ErrorCode.PostDeleteNotPossible,
+                    Message = "Not a valid user to delete the post."
+                };
+                result.Errors.Add(error);
+                return result;
+            }
             _context.Posts.Remove(post);
             await _context.SaveChangesAsync(cancellationToken);
             result.Payload = post;

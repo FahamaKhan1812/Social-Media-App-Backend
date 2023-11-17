@@ -21,7 +21,7 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Operation
 
     public async Task<OperationResult<string>> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
-       var result = new OperationResult<string>();
+        var result = new OperationResult<string>();
         try
         {
             var existingIdentity = await _userManager.FindByEmailAsync(request.Username);
@@ -37,7 +37,7 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Operation
                 result.Errors.Add(error);
                 return result;
             }
-  
+
             IdentityUser identity = new()
             {
                 Email = request.Username,
@@ -46,7 +46,7 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Operation
 
             //creating transaction
             using var transaction =  _dataContext.Database.BeginTransaction();
-            
+
             var createdIdentity = await _userManager.CreateAsync(identity, request.Password);
             if(!createdIdentity.Succeeded)
             {
