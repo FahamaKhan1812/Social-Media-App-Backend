@@ -35,6 +35,17 @@ public class UpdatePostCommandHandler : IRequestHandler<UpdatePostCommand, Opera
                 result.Errors.Add(error);
                 return result;
             }
+            if(post.UserProfileId != request.UserProfileId)
+            {
+                result.IsError = true;
+                Error error = new()
+                {
+                    Code = ErrorCode.PostUpdateUserNotPossible,
+                    Message = "Not a valid user to update the post."
+                };
+                result.Errors.Add(error);
+                return result;
+            }
             post.UpdatePost(request.TextContent);
             await _context.SaveChangesAsync(cancellationToken);
             result.Payload = post;
