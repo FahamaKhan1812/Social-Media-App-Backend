@@ -46,7 +46,19 @@ public class BaseController : ControllerBase
 
             return BadRequest(apiError);
         }
-       
+
+        if (errors.Any(e => e.Code == ErrorCode.IncorrectPassword))
+        {
+            var error = errors.FirstOrDefault(e => e.Code == ErrorCode.IncorrectPassword);
+
+            apiError.StatusCode = 400;
+            apiError.StatusPhrase = "Bad Request";
+            apiError.Timestamp = DateTime.Now;
+            apiError.Errors.Add(error.Message);
+
+            return BadRequest(apiError);
+        }
+
         if (errors.Any(e => e.Code == ErrorCode.IdentityUserNotFound))
         {
             var error = errors.FirstOrDefault(e => e.Code == ErrorCode.IdentityUserNotFound);
