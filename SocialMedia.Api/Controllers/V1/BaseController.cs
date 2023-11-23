@@ -46,7 +46,19 @@ public class BaseController : ControllerBase
 
             return BadRequest(apiError);
         }
-       
+
+        if (errors.Any(e => e.Code == ErrorCode.IncorrectPassword))
+        {
+            var error = errors.FirstOrDefault(e => e.Code == ErrorCode.IncorrectPassword);
+
+            apiError.StatusCode = 400;
+            apiError.StatusPhrase = "Bad Request";
+            apiError.Timestamp = DateTime.Now;
+            apiError.Errors.Add(error.Message);
+
+            return BadRequest(apiError);
+        }
+
         if (errors.Any(e => e.Code == ErrorCode.IdentityUserNotFound))
         {
             var error = errors.FirstOrDefault(e => e.Code == ErrorCode.IdentityUserNotFound);
@@ -77,6 +89,36 @@ public class BaseController : ControllerBase
         if (errors.Any(e => e.Code == ErrorCode.PostDeleteNotPossible))
         {
             var error = errors.FirstOrDefault(e => e.Code == ErrorCode.PostDeleteNotPossible);
+
+            apiError.StatusCode = 403;
+            apiError.StatusPhrase = "Unauthenticated";
+            apiError.Timestamp = DateTime.Now;
+            apiError.Errors.Add(error.Message);
+
+            return new ObjectResult(apiError)
+            {
+                StatusCode = 403
+            };
+        }
+
+        if (errors.Any(e => e.Code == ErrorCode.RemoveInteractionUserNotValid))
+        {
+            var error = errors.FirstOrDefault(e => e.Code == ErrorCode.RemoveInteractionUserNotValid);
+
+            apiError.StatusCode = 403;
+            apiError.StatusPhrase = "Unauthenticated";
+            apiError.Timestamp = DateTime.Now;
+            apiError.Errors.Add(error.Message);
+
+            return new ObjectResult(apiError)
+            {
+                StatusCode = 403
+            };
+        }
+        
+        if (errors.Any(e => e.Code == ErrorCode.UnAuthorizedAccountRemoval))
+        {
+            var error = errors.FirstOrDefault(e => e.Code == ErrorCode.UnAuthorizedAccountRemoval);
 
             apiError.StatusCode = 403;
             apiError.StatusPhrase = "Unauthenticated";
