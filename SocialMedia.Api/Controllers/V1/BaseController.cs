@@ -101,6 +101,36 @@ public class BaseController : ControllerBase
             };
         }
 
+        if (errors.Any(e => e.Code == ErrorCode.RemoveInteractionUserNotValid))
+        {
+            var error = errors.FirstOrDefault(e => e.Code == ErrorCode.RemoveInteractionUserNotValid);
+
+            apiError.StatusCode = 403;
+            apiError.StatusPhrase = "Unauthenticated";
+            apiError.Timestamp = DateTime.Now;
+            apiError.Errors.Add(error.Message);
+
+            return new ObjectResult(apiError)
+            {
+                StatusCode = 403
+            };
+        }
+        
+        if (errors.Any(e => e.Code == ErrorCode.UnAuthorizedAccountRemoval))
+        {
+            var error = errors.FirstOrDefault(e => e.Code == ErrorCode.UnAuthorizedAccountRemoval);
+
+            apiError.StatusCode = 403;
+            apiError.StatusPhrase = "Unauthenticated";
+            apiError.Timestamp = DateTime.Now;
+            apiError.Errors.Add(error.Message);
+
+            return new ObjectResult(apiError)
+            {
+                StatusCode = 403
+            };
+        }
+
         apiError.StatusCode = 500;
         apiError.StatusPhrase = "Server Error";
         apiError.Timestamp = DateTime.Now;

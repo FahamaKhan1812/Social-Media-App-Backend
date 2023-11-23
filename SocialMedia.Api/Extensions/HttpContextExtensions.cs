@@ -8,7 +8,7 @@ public static class HttpContextExtensions
         var userProfileId =  GetClaimValue(context, "UserProfileId");
         return userProfileId;
     }
-    public static Guid GetIdentityClaimValue(this HttpContext context)
+    public static Guid GetIdentityIdClaimValue(this HttpContext context)
     {
         var identityId = GetClaimValue(context, "IdentityId");
         return identityId;
