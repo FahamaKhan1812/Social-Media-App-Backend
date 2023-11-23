@@ -13,6 +13,7 @@ using SocialMedia.Application.Models;
 using SocialMedia.Application.Posts.CommandHandlers;
 using SocialMedia.Application.Posts.Commands;
 using SocialMedia.Application.Posts.Queries;
+using SocialMedia.Domain.Aggregates.PostAggregate;
 using SocialMedia.Domain.Aggregates.PostAggregates;
 using System.Security.Claims;
 
@@ -147,5 +148,60 @@ public class PostController : BaseController
         if (result.IsError) HandleErrorResponse(result.Errors);
         var newComment = _mapper.Map<PostCommentResponse>(result.Payload);
         return Ok(newComment);
+    }
+
+    [HttpGet]
+    [Route(ApiRoutes.Posts.PostInteractions)]
+    [ValidGuid("postId")]
+    public async Task<IActionResult> GetPostInteraction(string postId) 
+    {
+        var postGuid = Guid.Parse(postId);
+        var query = new GetPostInteractions()
+        {
+            PostId = postGuid
+        };
+        var result = await _mediator.Send(query);
+        var mapped = _mapper.Map<List<PostInteractionResponse>>(result.Payload);
+        return result.IsError ? HandleErrorResponse(result.Errors) : Ok(mapped);
+    }
+
+    [HttpPost]
+    [Route(ApiRoutes.Posts.PostInteractions)]
+    [ValidGuid("postId")]
+    [ValideModel]
+    public async Task<IActionResult> AddPostInteraction(string postId, [FromBody] PostInteractionCreate create)
+    {
+        var postGuid = Guid.Parse(postId);
+        var userProfile = HttpContext.GetUserProfileIdClaimValue();
+        var command = new AddInteraction()
+        {
+            PostId = postGuid,
+            Type = create.Type,
+            UserProfileId = userProfile
+        };
+        var result = await _mediator.Send(command);
+        var mapped = _mapper.Map<PostInteractionResponse>(result.Payload);
+        return result.IsError ? HandleErrorResponse(result.Errors) : Ok(mapped);
+
+    }
+
+    [HttpDelete]
+    [Route(ApiRoutes.Posts.InteractionById)]
+    [ValidGuid("postId", "interactionId")]
+    public async Task<IActionResult> RemovePostInteraction(string postId, string interactionId)
+    {
+        Guid postGuid = Guid.Parse(postId);
+        Guid interactionGuid = Guid.Parse(interactionId);
+        Guid userProfileGuid = HttpContext.GetUserProfileIdClaimValue();
+        var command = new RemovePostInteractionCommand()
+        {
+            InteractionId = interactionGuid,
+            PostId = postGuid,
+            UserProfileId = userProfileGuid
+        };
+
+        var result = await _mediator.Send(command);
+        var mapped = _mapper.Map<PostInteractionResponse>(result.Payload);
+        return result.IsError ? HandleErrorResponse(result.Errors) : Ok(mapped);
     }
 }
