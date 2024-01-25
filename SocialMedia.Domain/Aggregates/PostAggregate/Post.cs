@@ -78,7 +78,14 @@ public class Post
     {
         _comments.Remove(postComment);
     }
-
+    public void UpdatePostComment(Guid postCommentId, string updatedComment)
+    {
+        var comment = _comments.FirstOrDefault(c => c.CommentId == postCommentId);
+        if(comment != null && !string.IsNullOrWhiteSpace(updatedComment))
+        {
+            comment.UpdateCommentText(updatedComment);
+        }
+    }
     public void AddInteraction(PostInteraction postInteraction)
     {
         _interactions.Add(postInteraction);

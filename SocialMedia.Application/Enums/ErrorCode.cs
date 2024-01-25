@@ -1,6 +1,7 @@
 ﻿namespace SocialMedia.Application.Enums;
 public enum ErrorCode
 {
+    Unauthorized = 401,
     NotFound = 404,
     ServerError = 500,
 
@@ -17,6 +18,7 @@ public enum ErrorCode
     PostDeleteNotPossible = 301,
     RemoveInteractionUserNotValid =302,
     UnAuthorizedAccountRemoval = 306,
+    CommentRemovalNotAuthorized = 307,
 
     UnknownError = 999
 }
