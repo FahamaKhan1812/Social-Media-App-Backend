@@ -7,6 +7,7 @@ using SocialMedia.Api.Contracts.Identity;
 using SocialMedia.Api.Extensions;
 using SocialMedia.Api.Filters;
 using SocialMedia.Application.Identity.Commands;
+using SocialMedia.Application.Identity.Queries;
 
 namespace SocialMedia.Api.Controllers.V1;
 
@@ -74,5 +75,21 @@ public class IdentityController : BaseController
 
         var response = await _mediator.Send(command);
         return response.IsError ? HandleErrorResponse(response.Errors) : NoContent();
+    }
+
+    [HttpGet]
+    [Route(ApiRoutes.Identity.CurrentUser)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public async Task<IActionResult> CurrentUser()
+    {
+        var userEmail = HttpContext.GetUserEmailClaimValue();
+        var userProfileId = HttpContext.GetUserProfileIdClaimValue();
+        var query = new GetCurrentUser()
+        {
+           UserProfileId = userProfileId,
+           UserEmail = userEmail,
+        };
+        var result = await _mediator.Send(query);
+        return result.IsError ? HandleErrorResponse(result.Errors) : Ok(result.Payload);
     }
 }

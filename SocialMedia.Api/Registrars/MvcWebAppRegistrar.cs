@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using SocialMedia.Application.Enums;
+using SocialMedia.Application.Models;
 
 namespace SocialMedia.Api.Registrars
 {
@@ -18,6 +20,22 @@ namespace SocialMedia.Api.Registrars
             app.UseHttpsRedirection();
 
             app.UseAuthentication();
+            app.UseStatusCodePages(async context =>
+            {
+                if (context.HttpContext.Response.StatusCode == 401)
+                {
+                    context.HttpContext.Response.ContentType = "application/json";
+
+                    Error errorResponse = new()
+                    {
+                        Code= ErrorCode.Unauthorized,
+                        Message = "Unauthorized. Please provide a valid JWT."
+                    };
+
+                    var jsonResponse = System.Text.Json.JsonSerializer.Serialize(errorResponse);
+                    await context.HttpContext.Response.WriteAsync(jsonResponse);
+                }
+            });
             app.UseAuthorization();
 
             app.MapControllers();
