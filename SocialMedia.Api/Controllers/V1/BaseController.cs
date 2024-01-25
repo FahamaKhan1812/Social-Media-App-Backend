@@ -131,6 +131,21 @@ public class BaseController : ControllerBase
             };
         }
 
+        if (errors.Any(e => e.Code == ErrorCode.RemoveInteractionUserNotValid))
+        {
+            var error = errors.FirstOrDefault(e => e.Code == ErrorCode.RemoveInteractionUserNotValid);
+
+            apiError.StatusCode = 404;
+            apiError.StatusPhrase = "Not Found";
+            apiError.Timestamp = DateTime.Now;
+            apiError.Errors.Add(error.Message);
+
+            return new ObjectResult(apiError)
+            {
+                StatusCode = 403
+            };
+        }
+
         apiError.StatusCode = 500;
         apiError.StatusPhrase = "Server Error";
         apiError.Timestamp = DateTime.Now;
